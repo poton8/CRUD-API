@@ -1,0 +1,23 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/poton8/CRUD-API.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/poton8/CRUD-API/issues"
+  },
+  "homepage": "https://github.com/poton8/CRUD-API#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "vue": "^2.6.10"
+  }
+}
