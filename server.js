@@ -4,7 +4,7 @@ var express = require('express')
 var bodyParser = require('body-parser')
 var app = express()
 var uuidv4 = require('uuid/v4')
-employees = data.employees
+//employees = data.employees
 
 //Show server is running
 app.listen(3000, function listening(){
@@ -12,21 +12,20 @@ app.listen(3000, function listening(){
     console.log("hi")
 })
 
-//uses the html document inside the folder "Website"
+//uses the html document inside the folder "Website" and bodyParser for json data
 app.use(express.static('Website'))
 app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //Reads all employees
 app.get('/employees', (request, response)=>{
-    response.send(employees)
+    response.send(data)
 })
 
 //Query for word in JSON file
 app.get('/employees/:uuid', (request, response)=>{
     uuid = request.params.uuid
-    var found = employees.find(element =>{
+    var found = data.employees.find(element =>{
         return element.uuid == uuid
     })
     response.send(found)
@@ -39,17 +38,50 @@ app.post('/employees', (request, response) =>{
         uuid: id,
         name: request.body.name
     }    
-    employees.push(employee)
+    data.employees.push(employee)
     response.send(employee)
+    writeFile()
 })
 
 //update employee
 app.put('/employees/:uuid', (request, response) =>{
     uuid = request.params.uuid
-    var found = employees.find(element =>{
+    console.log(request.body)
+    var foundIndex = data.employees.findIndex(element =>{
         return element.uuid == uuid
     })
-    if(found){
 
+    if(foundIndex != null){
+        data.employees[foundIndex].name = request.body.name
+        response.send(data.employees[foundIndex])
+        writeFile()
+    }
+    else{
+        response.send("employee not found")
     }
 })
+
+//delete employee
+app.delete('/employees/:uuid', (request, response) =>{
+    uuid = request.params.uuid
+    var foundIndex = data.employees.findIndex(element =>{
+        return element.uuid == uuid
+    })
+    console.log(foundIndex)
+    
+    if(foundIndex != null){
+        data.employees.splice(foundIndex,1)
+        response.send("employee has been deleted")
+        writeFile()
+    }
+    else{
+        console.log("employee not found")
+    }
+})
+
+//overwrites JSON file
+function writeFile(){
+    fs.writeFile("FakeData.json",JSON.stringify(data,null,2),(err) =>{
+        console.log("finished")
+    })
+}
